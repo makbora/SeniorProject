@@ -1,6 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\WebScraping",
+    "\\WebScraping\\WebScraping"
   ],
+  "SelectedNode": "\\WebScraping\\Program.cs",
   "PreviewInSolutionExplorer": false
 }
