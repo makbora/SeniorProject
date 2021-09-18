@@ -4,6 +4,7 @@ using HtmlAgilityPack;
 using System.IO;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Web;
 namespace WebScraping
 {
     class Program
@@ -13,6 +14,7 @@ namespace WebScraping
         {
             public int RecId { get; set; }
             public string Title { get; set; }
+            public string Type { get; set; }
             public string Link { get; set; }
 
         }
@@ -28,8 +30,9 @@ namespace WebScraping
         {
             public int ReqId { get; set; }
             public int RecId { get; set; }
-            public int IngIg { get; set; }
+            public int IngId { get; set; }
             public string Amount { get; set; }
+            public string Measurment { get; set; } 
         }
         //Class for Instructions Table
         public class Instruction
@@ -58,8 +61,9 @@ namespace WebScraping
                 var RecipeNames = doc.DocumentNode.SelectNodes("//h2[@class='post-title']");
                 foreach (var item in RecipeNames)
                 {
+                    var title = HttpUtility.HtmlDecode(item.InnerText);
                     var RecipeLink = doc.DocumentNode.SelectNodes("//a[@title='" + item.InnerText + "']");
-                    recipes.Add(new Recipe { RecId = recid, Title = item.InnerText, Link = RecipeLink[0].GetAttributeValue("href", null) });
+                    recipes.Add(new Recipe { RecId = recid, Title = title, Link = RecipeLink[0].GetAttributeValue("href", null) });
                     recid++;
                 }
                 var nextPageHtml = doc.DocumentNode.SelectNodes("//a[@class='next page-numbers']");
@@ -96,27 +100,36 @@ namespace WebScraping
                     var behindUnit = 0;
                     var behindNum = 0;
                     var amount = "";
+                    var unit = "";
                     for (var item = 0; item < ingredient.Count; item++)
                     {
                         Random rand = new Random();
                         var id = 0;
                         if (inghtmllen[item].OuterHtml.Contains("\"wprm-recipe-ingredient-unit\"") && inghtmllen[item].OuterHtml.Contains("\"wprm-recipe-ingredient-amount\""))
                         {
-                            amount = amountNum[item-behindNum].InnerText + " " + amountUnit[item - behindUnit].InnerText;
+                            amount = amountNum[item - behindNum].InnerText;
+                            unit = amountUnit[item - behindUnit].InnerText;
+                            amount = HttpUtility.HtmlDecode(amount);
+                            unit = HttpUtility.HtmlDecode(unit);
                         }
                         else if(inghtmllen[item].OuterHtml.Contains("\"wprm-recipe-ingredient-unit\""))
                         {
-                            amount = amountUnit[item-behindUnit].InnerText;
+                            unit = amountUnit[item-behindUnit].InnerText;
+                            unit = HttpUtility.HtmlDecode(unit);
+                            amount = "";
                             behindNum++;
                         }
                         else if(inghtmllen[item].OuterHtml.Contains("\"wprm-recipe-ingredient-amount\""))
                         {
                             amount = amountNum[item-behindNum].InnerText;
+                            amount = HttpUtility.HtmlDecode(amount);
+                            unit = "";
                             behindUnit++;
                         }
                         else
                         {
-                            amount = "(To taste)";
+                            amount = "";
+                            unit = "";
                             behindNum++;
                             behindUnit++;
                         }
@@ -124,34 +137,31 @@ namespace WebScraping
                         {
                             foreach (var ing in ingredients)
                             {
-                                if (ing.Name.Equals(ingredient[item].InnerText))
+                                if (ing.Name.Equals(HttpUtility.HtmlDecode(ingredient[item].InnerText)))
                                 {
                                     id = ing.IngId;
-                                    requirements.Add(new RecipeReq { ReqId = reqid, RecId = recipe.RecId, IngIg = id, Amount = amount });
+                                    requirements.Add(new RecipeReq { ReqId = reqid, RecId = recipe.RecId, IngId = id, Amount = amount, Measurment=unit });
                                     reqid++;
                                     break;
                                 }
                             }
                             if (id == 0)
                             {
-                                ingredients.Add(new Ingredient { IngId = ingid, Name = ingredient[item].InnerText, Price = rand.Next(1, 100) * 0.25 });
-                                requirements.Add(new RecipeReq { ReqId = reqid, RecId = recipe.RecId, IngIg = ingid, Amount = amount });
+                                ingredients.Add(new Ingredient { IngId = ingid, Name = HttpUtility.HtmlDecode(ingredient[item].InnerText), Price = rand.Next(1, 100) * 0.25 });
+                                requirements.Add(new RecipeReq { ReqId = reqid, RecId = recipe.RecId, IngId = ingid, Amount = amount, Measurment = unit });
                                 ingid++;
                                 reqid++;
                             }
                         }
                         else
                         {
-                            ingredients.Add(new Ingredient { IngId = ingid, Name = ingredient[item].InnerText, Price = rand.Next(1, 100) * 0.25 });
-                            requirements.Add(new RecipeReq { ReqId = reqid, RecId = recipe.RecId, IngIg = ingid, Amount = amount });
+                            ingredients.Add(new Ingredient { IngId = ingid, Name = HttpUtility.HtmlDecode(ingredient[item].InnerText), Price = rand.Next(1, 100) * 0.25 });
+                            requirements.Add(new RecipeReq { ReqId = reqid, RecId = recipe.RecId, IngId = ingid, Amount = amount, Measurment = unit });
                             ingid++;
                             reqid++;
                         }
                     }
-                    var instruction = doc.DocumentNode.SelectNodes("//span[@style='display: block;']");
-
-                        instruction = doc.DocumentNode.SelectNodes("//div[@class='wprm-recipe-instruction-text']");
-                    
+                    var instruction = doc.DocumentNode.SelectNodes("//div[@class='wprm-recipe-instruction-text']"); 
                     var order = 0;
                     foreach (var instr in instruction)
                     {
@@ -159,15 +169,38 @@ namespace WebScraping
                         if (instr.OuterHtml.Contains("span"))
                         {
                             instruct = instr.OuterHtml.Substring(instr.OuterHtml.IndexOf(";") + 3, instr.OuterHtml.Length - 85);
+                            instruct = HttpUtility.HtmlDecode(instruct);
                         }
                         else
                         {
                             instruct = instr.InnerText;
+                            instruct = HttpUtility.HtmlDecode(instruct);
                         }
                         instructions.Add(new Instruction { InstrId = instrid, RecId = recipe.RecId, Order = order, Direction = instruct });
                         order++;
                         instrid++;
                     }
+                    var type = doc.DocumentNode.SelectSingleNode("//p[@id='breadcrumbs']");
+                    //var text = type.OuterHtml.Substring(type.OuterHtml.IndexOf("Recipes")+8);
+                    var text = type.InnerText.Substring(type.InnerText.IndexOf("Recipes") + 9);
+                    if(text.Contains("Recipe"))
+                    {
+                        text=text.Substring(text.IndexOf(" ")+1,text.IndexOf("»")-1);
+                        /*text = text.Substring(text.IndexOf("Recipes") - 20);
+                        text = text.Substring(text.IndexOf(">") + 1, ((text.IndexOf("<") - 1) - text.IndexOf(">")));*/
+                    }
+                    else if(text.Contains("Meals"))
+                    {
+                        text=text.Substring(text.IndexOf(" ") + 1, text.IndexOf("»") - 1);
+                        /*text = text.Substring(text.IndexOf("Meals") - 20);
+                        text = text.Substring(text.IndexOf(">") + 1, ((text.IndexOf("<") - 1) - text.IndexOf(">")));*/
+                    }
+                    else
+                    {
+                        text = "Other";
+                        //Console.WriteLine(type.OuterHtml.Substring(type.OuterHtml.IndexOf("Recipes") - 20);
+                    }
+                    recipe.Type = HttpUtility.HtmlDecode(text);
                 }
             }
             /*var ingid = 1;
