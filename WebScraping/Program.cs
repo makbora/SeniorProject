@@ -133,11 +133,37 @@ namespace WebScraping
                             behindNum++;
                             behindUnit++;
                         }
+                        var name = HttpUtility.HtmlDecode(ingredient[item].InnerText).ToLower();
+                        name=name.Replace("*","");
+                        name=name.Replace(",", "");
+                        if(name.Contains("\""))
+                        {
+                            char val = name[name.IndexOf("\"") - 1];
+                            if (Char.IsDigit(val))
+                            {
+                                name = name.Replace("\"", "inch");
+                            }
+                            else
+                            {
+                                name = name.Replace("\"", "");
+                            }
+                        }
+                        name = name.Replace("a ", "");
+                        name=name.Replace("divided", "");
+                        /*if (name.Contains("for"))
+                        {
+                            name = name.Substring(0, name.IndexOf("for") + 1);
+                        }*/
+                        if (name.Contains('('))
+                        {
+                            name = name.Substring(0, name.IndexOf('('));
+                        }
+                        name = name.Trim();
                         if (ingredients.Count != 0)
                         {
                             foreach (var ing in ingredients)
                             {
-                                if (ing.Name.Equals(HttpUtility.HtmlDecode(ingredient[item].InnerText)))
+                                if (ing.Name.Equals(name))
                                 {
                                     id = ing.IngId;
                                     requirements.Add(new RecipeReq { ReqId = reqid, RecId = recipe.RecId, IngId = id, Amount = amount, Measurment=unit });
@@ -147,7 +173,7 @@ namespace WebScraping
                             }
                             if (id == 0)
                             {
-                                ingredients.Add(new Ingredient { IngId = ingid, Name = HttpUtility.HtmlDecode(ingredient[item].InnerText), Price = rand.Next(1, 100) * 0.25 });
+                                ingredients.Add(new Ingredient { IngId = ingid, Name = name, Price = rand.Next(1, 100) * 0.25 });
                                 requirements.Add(new RecipeReq { ReqId = reqid, RecId = recipe.RecId, IngId = ingid, Amount = amount, Measurment = unit });
                                 ingid++;
                                 reqid++;
@@ -155,7 +181,7 @@ namespace WebScraping
                         }
                         else
                         {
-                            ingredients.Add(new Ingredient { IngId = ingid, Name = HttpUtility.HtmlDecode(ingredient[item].InnerText), Price = rand.Next(1, 100) * 0.25 });
+                            ingredients.Add(new Ingredient { IngId = ingid, Name = name, Price = rand.Next(1, 100) * 0.25 });
                             requirements.Add(new RecipeReq { ReqId = reqid, RecId = recipe.RecId, IngId = ingid, Amount = amount, Measurment = unit });
                             ingid++;
                             reqid++;
