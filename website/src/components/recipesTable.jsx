@@ -12,9 +12,9 @@ class RecipesTable extends Component {
         <Link to={`/recipes/${recipe._id}`}>{recipe.title}</Link>
       ),
     },
-    { path: "genre.name", label: "Genre" },
-    { path: "numberInStock", label: "Stock" },
-    { path: "dailyRentalRate", label: "Rate" },
+    { path: "genre.name", label: "Type" },
+    { path: "servings", label: "Servings" },
+    { path: "rating", label: "Rating" },
     {
       key: "like",
       content: (recipe) => (

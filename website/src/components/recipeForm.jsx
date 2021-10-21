@@ -9,8 +9,9 @@ class RecipeForm extends Form {
     data: {
       title: "",
       genreId: "",
-      numberInStock: "",
-      dailyRentalRate: "",
+      servings: "",
+      ingredients: "",
+      rating: "",
     },
     genres: [],
     errors: {},
@@ -20,16 +21,13 @@ class RecipeForm extends Form {
     _id: Joi.string(),
     title: Joi.string().required().label("Title"),
     genreId: Joi.string().required().label("Type"),
-    numberInStock: Joi.string()
+    servings: Joi.string()
       .required()
       .min(0)
       .max(100)
-      .label("Number in Stock"),
-    dailyRentalRate: Joi.number()
-      .required()
-      .min(0)
-      .max(10)
-      .label("Daily Rental Rate"),
+      .label("Number of Servings"),
+    ingredients: Joi.string().required().label("Ingredients"),
+    rating: Joi.number().required().min(1).max(5).label("Rating"),
   };
 
   componentDidMount() {
@@ -50,8 +48,9 @@ class RecipeForm extends Form {
       _id: recipe._id,
       title: recipe.title,
       genreId: recipe.genre._id,
-      numberInStock: recipe.numberInStock,
-      dailyRentalRate: recipe.dailyRentalRate,
+      servings: recipe.servings,
+      ingredients: recipe.ingredients,
+      rating: recipe.rating,
     };
   }
 
@@ -68,8 +67,10 @@ class RecipeForm extends Form {
         <form onSubmit={this.handleSubmit}>
           {this.renderInput("title", "Title")}
           {this.renderSelect("genreId", "Type", this.state.genres)}
-          {this.renderInput("numberInStock", "Number in Stock", "number")}
-          {this.renderInput("dailyRentalRate", "Rate")}
+          {this.renderInput("servings", "Servings", "number")}
+          {this.renderInput("ingredients", "Ingredients")}
+          {this.renderInput("rating", "Rating")}
+          <p />
           {this.renderButton("Save")}
         </form>
       </div>

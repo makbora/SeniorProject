@@ -18,7 +18,7 @@ class Recipes extends Component {
   };
 
   componentDidMount() {
-    const genres = [{ _id: "", name: "All Genres" }, ...getGenres()];
+    const genres = [{ _id: "", name: "All Recipe Categories" }, ...getGenres()];
 
     this.setState({ recipes: getRecipes(), genres });
   }
