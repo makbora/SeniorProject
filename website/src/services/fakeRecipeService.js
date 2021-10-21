@@ -2,68 +2,54 @@ import * as genresAPI from "./fakeGenreService";
 
 const recipes = [
   {
-    _id: "5b21ca3eeb7f6fbccd471815",
-    title: "Terminator",
-    genre: { _id: "5b21ca3eeb7f6fbccd471818", name: "Action" },
-    numberInStock: 6,
-    dailyRentalRate: 2.5,
+    _id: "1",
+    title: "Buffalo Wings",
+    genre: { _id: "appetizer", name: "Appetizer" },
+    servings: 6,
+    ingredients: "Party-Style Wings, Buffalo Sauce",
+    rating: 2.5,
     publishDate: "2018-01-03T19:04:28.809Z",
   },
   {
-    _id: "5b21ca3eeb7f6fbccd471816",
-    title: "Die Hard",
-    genre: { _id: "5b21ca3eeb7f6fbccd471818", name: "Action" },
-    numberInStock: 5,
-    dailyRentalRate: 2.5,
+    _id: "2",
+    title: "Chocolate Cake",
+    genre: { _id: "dessert", name: "Dessert" },
+    servings: 5,
+    ingredients:
+      "Chocolate, Flour, Eggs, Sugar, Coccoa Powder, Baking Powder, Milk",
+    rating: 2.5,
   },
   {
-    _id: "5b21ca3eeb7f6fbccd471817",
-    title: "Get Out",
-    genre: { _id: "5b21ca3eeb7f6fbccd471820", name: "Thriller" },
-    numberInStock: 8,
-    dailyRentalRate: 3.5,
+    _id: "3",
+    title: "Roasted Chicken",
+    genre: { _id: "entree", name: "Entree" },
+    servings: 8,
+    ingredients: "Chicken, Salt, Pepper, Thyme",
+    rating: 4.3,
   },
   {
-    _id: "5b21ca3eeb7f6fbccd471819",
-    title: "Trip to Italy",
-    genre: { _id: "5b21ca3eeb7f6fbccd471814", name: "Comedy" },
-    numberInStock: 7,
-    dailyRentalRate: 3.5,
+    _id: "4",
+    title: "Chips & Dip",
+    genre: { _id: "appetizer", name: "Appetizer" },
+    servings: 7,
+    ingredients: "Chips, Advocado, Salsa",
+    rating: 3.5,
   },
   {
-    _id: "5b21ca3eeb7f6fbccd47181a",
-    title: "Airplane",
-    genre: { _id: "5b21ca3eeb7f6fbccd471814", name: "Comedy" },
-    numberInStock: 7,
-    dailyRentalRate: 3.5,
+    _id: "5",
+    title: "Cheesecake",
+    genre: { _id: "dessert", name: "Dessert" },
+    servings: 7,
+    ingredients: "Cheese, Eggs, Sugar",
+    rating: 3.2,
   },
   {
-    _id: "5b21ca3eeb7f6fbccd47181b",
-    title: "Wedding Crashers",
-    genre: { _id: "5b21ca3eeb7f6fbccd471814", name: "Comedy" },
-    numberInStock: 7,
-    dailyRentalRate: 3.5,
-  },
-  {
-    _id: "5b21ca3eeb7f6fbccd47181e",
-    title: "Gone Girl",
-    genre: { _id: "5b21ca3eeb7f6fbccd471820", name: "Thriller" },
-    numberInStock: 7,
-    dailyRentalRate: 4.5,
-  },
-  {
-    _id: "5b21ca3eeb7f6fbccd47181f",
-    title: "The Sixth Sense",
-    genre: { _id: "5b21ca3eeb7f6fbccd471820", name: "Thriller" },
-    numberInStock: 4,
-    dailyRentalRate: 3.5,
-  },
-  {
-    _id: "5b21ca3eeb7f6fbccd471821",
-    title: "The Avengers",
-    genre: { _id: "5b21ca3eeb7f6fbccd471818", name: "Action" },
-    numberInStock: 7,
-    dailyRentalRate: 3.5,
+    _id: "6",
+    title: "Grilled Steak",
+    genre: { _id: "entree", name: "Entree" },
+    servings: 7,
+    ingredients: "Steak, Salt, Pepper",
+    rating: 5,
   },
 ];
 
@@ -79,8 +65,9 @@ export function saveRecipe(recipe) {
   let recipeInDb = recipes.find((m) => m._id === recipe._id) || {};
   recipeInDb.title = recipe.title;
   recipeInDb.genre = genresAPI.genres.find((g) => g._id === recipe.genreId);
-  recipeInDb.numberInStock = recipe.numberInStock;
-  recipeInDb.dailyRentalRate = recipe.dailyRentalRate;
+  recipeInDb.servings = recipe.servings;
+  recipeInDb.ingredients = recipe.ingredients;
+  recipeInDb.rating = recipe.rating;
 
   if (!recipeInDb._id) {
     recipeInDb._id = Date.now().toString();
