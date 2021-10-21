@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { Route, Redirect, Switch } from "react-router-dom";
 import Recipes from "./components/recipes";
 import RecipeForm from "./components/recipeForm";
-import Customers from "./components/customers";
-import Rentals from "./components/rentals";
+import GroceryList from "./components/grocerylist";
+import Home from "./components/home";
 import NotFound from "./components/notFound";
 import NavBar from "./components/navBar";
 import LoginForm from "./components/loginForm";
@@ -21,10 +21,10 @@ class App extends Component {
             <Route path="/login" component={LoginForm}></Route>
             <Route path="/recipes/:id" component={RecipeForm}></Route>
             <Route path="/recipes" component={Recipes}></Route>
-            <Route path="/customers" component={Customers}></Route>
-            <Route path="/rentals" component={Rentals}></Route>
+            <Route path="/grocerylist" component={GroceryList}></Route>
+            <Route path="/" component={Home}></Route>
             <Route path="/not-found" component={NotFound}></Route>
-            <Redirect from="/" exact to="/recipes" />
+            <Redirect from="/" exact to="/home" />
             <Redirect to="/not-found" />
           </Switch>
         </main>
