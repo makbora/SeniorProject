@@ -62,8 +62,11 @@ namespace WebScraping
                 foreach (var item in RecipeNames)
                 {
                     var title = HttpUtility.HtmlDecode(item.InnerText);
-                    var RecipeLink = doc.DocumentNode.SelectNodes("//a[@title='" + item.InnerText + "']");
-                    recipes.Add(new Recipe { RecId = recid, Title = title, Link = RecipeLink[0].GetAttributeValue("href", null) });
+                    title = title.Replace(' ', '-').ToLower();
+                    //var RecipeLink = doc.DocumentNode.SelectNodes("//a[@target='\"_self\"']");
+                    //recipes.Add(new Recipe { RecId = recid, Title = title, Link = RecipeLink[0].GetAttributeValue("href", null) });
+                    var link = "https://www.budgetbytes.com/" + title + "/";
+                    recipes.Add(new Recipe { RecId = recid, Title = title, Link =link  });
                     recid++;
                 }
                 var nextPageHtml = doc.DocumentNode.SelectNodes("//a[@class='next page-numbers']");
@@ -148,22 +151,74 @@ namespace WebScraping
                                 name = name.Replace("\"", "");
                             }
                         }
-                        name = name.Replace("a ", "");
-                        name=name.Replace("divided", "");
-                        /*if (name.Contains("for"))
+                        if (name.Contains("pinch "))
                         {
-                            name = name.Substring(0, name.IndexOf("for") + 1);
-                        }*/
+                            if(name.Contains("of "))
+                            {
+                                name = name.Substring(name.IndexOf("of") + 4);
+                            }
+                            else
+                            {
+                                name = name.Substring(name.IndexOf("pinch ") + 5);
+                            }
+                        }
+                        name = name.Replace("divided", "");
+                        name = name.Replace("sliced", "");
+                        name = name.Replace("to taste", "");
+                        name = name.Replace("as needed", "");
+                        name = name.Replace("optional", "");
                         if (name.Contains('('))
                         {
-                            name = name.Substring(0, name.IndexOf('('));
+                            if(name.IndexOf('(')<3)
+                            {
+                                name = name.Substring(name.IndexOf(')')+1);
+                            }
+                            else
+                            {
+                                name = name.Substring(0, name.IndexOf('('));
+                            }
                         }
-                        name = name.Trim();
+                        if(name.Contains(" for "))
+                        {
+                            name = name.Substring(0, name.IndexOf("for"));
+                        }
+                        if (name.Contains("salt ") && name.Contains("pepper"))
+                        {
+                            name = name.Substring(name.IndexOf("and") + 3);
+                            var ingr = ingredients.Find(x => x.Name.Equals("salt"));
+                            requirements.Add(new RecipeReq { ReqId = reqid, RecId = recipe.RecId, IngId = ingr.IngId, Amount = amount, Measurment = unit });
+                            reqid++;
+                        }
+                        if(name.Contains("of "))
+                        {
+                            if (name.IndexOf("of") < 2)
+                            {
+                                name.Replace("of", "");
+                            }
+                            else if (name.Contains("choice"))
+                            {
+                                name=name.Substring(0, name.IndexOf("of"));
+                            }
+                        }
+                        if (name.Contains("$"))
+                        {
+                            name = name.Substring(0, name.IndexOf("$"));
+                        }
+                        if (name.Contains(" or "))
+                        {
+                            if (name.IndexOf("or") + 4 >= name.Length)
+                            {
+                                name.Replace("or", "");
+                            }
+                        }
+                            name = name.Trim();
                         if (ingredients.Count != 0)
                         {
                             foreach (var ing in ingredients)
                             {
-                                if (ing.Name.Equals(name))
+                                var plur1 = ing.Name + "s";
+                                var plur2 = ing.Name + "es";
+                                if (ing.Name.Equals(name) || plur1.Equals(name) || plur2.Equals(name))
                                 {
                                     id = ing.IngId;
                                     requirements.Add(new RecipeReq { ReqId = reqid, RecId = recipe.RecId, IngId = id, Amount = amount, Measurment=unit });
@@ -229,79 +284,6 @@ namespace WebScraping
                     recipe.Type = HttpUtility.HtmlDecode(text);
                 }
             }
-            /*var ingid = 1;
-            var reqid = 1;
-            var instrid = 1;
-            for (var i = 0; i < 15; i++)
-            {
-                doc = web.Load(recipes[i].Link);
-                var ingredient = doc.DocumentNode.SelectNodes("//span[@class='wprm-recipe-ingredient-name']");
-                var amountNum = doc.DocumentNode.SelectNodes("//span[@class='wprm-recipe-ingredient-amount']");
-                var amountUnit = doc.DocumentNode.SelectNodes("//span[@class='wprm-recipe-ingredient-unit']");
-                var inghtmllen = doc.DocumentNode.SelectNodes("//li[@class='wprm-recipe-ingredient']");
-                //Mark recipes that don't fit the format to be removed
-                if (ingredient == null)
-                {
-                    foremoval.Add(recipes.IndexOf(recipes[i]));
-                }
-                else
-                {
-                    //Check to see if an ingredient has already been added to the list before adding it 
-                    var behind = 0;
-                    var amount = ""; 
-                    for (var item=0;item<ingredient.Count;item++)
-                    {
-                        Random rand = new Random();
-                        var id = 0;
-                        if(inghtmllen[item].OuterHtml.Contains("\"wprm-recipe-ingredient-unit\""))
-                        {
-                            amount = amountNum[item].InnerText + " " + amountUnit[item-behind].InnerText;
-                        }
-                        else
-                        {
-                            amount = amountNum[item].InnerText;
-                            behind++;
-                        }
-                        if (ingredients.Count!=0)
-                        {
-                            foreach (var ing in ingredients)
-                            {
-                                if (ing.Name.Equals(ingredient[item].InnerText))
-                                {
-                                    id = ing.IngId;
-                                    requirements.Add(new RecipeReq { ReqId = reqid, RecId = recipes[i].RecId, IngIg = id, Amount = amount });
-                                    reqid++;
-                                    break;
-                                }
-                            }
-                            if (id == 0)
-                            {
-                                ingredients.Add(new Ingredient { IngId = ingid, Name = ingredient[item].InnerText, Price = rand.Next(1, 100) * 0.25 });
-                                requirements.Add(new RecipeReq { ReqId = reqid, RecId = recipes[i].RecId, IngIg = ingid, Amount = amount });
-                                ingid++;
-                                reqid++;
-                            }
-                        }
-                        else
-                        {
-                            ingredients.Add(new Ingredient { IngId = ingid, Name = ingredient[item].InnerText, Price = rand.Next(1, 100) * 0.25 });
-                            requirements.Add(new RecipeReq { ReqId = reqid, RecId = recipes[i].RecId, IngIg = ingid, Amount = amount });
-                            ingid++;
-                            reqid++;
-                        }                        
-                    }
-                    var instruction = doc.DocumentNode.SelectNodes("//span[@style='display: block;']");
-                    var order = 0;
-                    foreach (var instr in instruction)
-                    {
-                        
-                        instructions.Add(new Instruction { InstrId = instrid, RecId = recipes[i].RecId, Order = order, Direction = instr.InnerText });
-                        order++;
-                        instrid++;
-                    }
-                }
-
-            }*/
             //Remove the recipes that did not fit the format
             var removals = 0;
             foreach(var index in foremoval)
@@ -315,7 +297,7 @@ namespace WebScraping
             {
                 csv.WriteRecords(recipes);
             }
-            using (var writer = new StreamWriter("C:/Users/micha/Documents/ingredients.csv"))
+            using (var writer = new StreamWriter("C:/Users/micha/Documents/ingredientsextreme2.csv"))
             using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
             {
                 csv.WriteRecords(ingredients);
