@@ -62,10 +62,10 @@ namespace WebScraping
                 foreach (var item in RecipeNames)
                 {
                     var title = HttpUtility.HtmlDecode(item.InnerText);
-                    title = title.Replace(' ', '-').ToLower();
+                    var ltitle = title.Replace(' ', '-').ToLower();
                     //var RecipeLink = doc.DocumentNode.SelectNodes("//a[@target='\"_self\"']");
                     //recipes.Add(new Recipe { RecId = recid, Title = title, Link = RecipeLink[0].GetAttributeValue("href", null) });
-                    var link = "https://www.budgetbytes.com/" + title + "/";
+                    var link = "https://www.budgetbytes.com/" + ltitle + "/";
                     recipes.Add(new Recipe { RecId = recid, Title = title, Link =link  });
                     recid++;
                 }
