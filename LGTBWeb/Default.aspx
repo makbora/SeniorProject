@@ -4,7 +4,7 @@
 
     <div style="height: 576px; width: 1120px; padding-top: 2em;">
         <div style="float:left;width:191px; ">
-            <asp:Label ID="Label1" runat="server" Text="Genre:"></asp:Label>
+            <asp:Label ID="Label1" runat="server" Text="Category:"></asp:Label>
             <br />
             <asp:ListBox ID="GenreBox" runat="server" DataSourceID="GenreDS" DataTextField="kind" DataValueField="kind" Height="263px" SelectionMode="Multiple" Width="184px" AppendDataBoundItems="True" CssClass="myListBox">
                 <asp:ListItem>All</asp:ListItem>
@@ -19,7 +19,7 @@
                 <Columns>
                     <asp:BoundField DataField="title" HeaderText="Recipe" SortExpression="title">
                     </asp:BoundField>
-                    <asp:BoundField DataField="kind" HeaderText="Genre" SortExpression="kind">
+                    <asp:BoundField DataField="kind" HeaderText="Category" SortExpression="kind">
                     </asp:BoundField>
                     <asp:BoundField DataField="link" HeaderText="Link" SortExpression="link"></asp:BoundField>
                 </Columns>
