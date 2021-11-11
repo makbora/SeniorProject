@@ -110,7 +110,7 @@ namespace WebScraping
                         var id = 0;
                         if (inghtmllen[item].OuterHtml.Contains("\"wprm-recipe-ingredient-unit\"") && inghtmllen[item].OuterHtml.Contains("\"wprm-recipe-ingredient-amount\""))
                         {
-                            amount = amountNum[item - behindNum].InnerText;
+                            amount = amountNum[item - behindNum].InnerText.Trim();
                             unit = amountUnit[item - behindUnit].InnerText;
                             amount = HttpUtility.HtmlDecode(amount);
                             unit = HttpUtility.HtmlDecode(unit);
@@ -119,20 +119,20 @@ namespace WebScraping
                         {
                             unit = amountUnit[item-behindUnit].InnerText;
                             unit = HttpUtility.HtmlDecode(unit);
-                            amount = "";
+                            amount = "NULL";
                             behindNum++;
                         }
                         else if(inghtmllen[item].OuterHtml.Contains("\"wprm-recipe-ingredient-amount\""))
                         {
-                            amount = amountNum[item-behindNum].InnerText;
+                            amount = amountNum[item-behindNum].InnerText.Trim();
                             amount = HttpUtility.HtmlDecode(amount);
-                            unit = "";
+                            unit = "NULL";
                             behindUnit++;
                         }
                         else
                         {
-                            amount = "";
-                            unit = "";
+                            amount = "NULL";
+                            unit = "NULL";
                             behindNum++;
                             behindUnit++;
                         }
