@@ -13,8 +13,8 @@
             <asp:SqlDataSource ID="GenreDS" runat="server" ConnectionString="<%$ ConnectionStrings:LGTBConnectionString %>" ProviderName="<%$ ConnectionStrings:LGTBConnectionString.ProviderName %>" SelectCommand="SELECT DISTINCT &quot;kind&quot; FROM &quot;recipes&quot; ORDER BY &quot;kind&quot;"></asp:SqlDataSource>
         </div>
         <div style="float:left;width:924px; height: 613px;">
-            <asp:Label ID="Label2" runat="server" Text="Results:"></asp:Label>
-            <asp:Label ID="Label3" runat="server" Text="Label"></asp:Label>
+            <%--<asp:Label ID="Label2" runat="server" Text="Results:"></asp:Label>
+            <asp:Label ID="Label3" runat="server" Text="Label"></asp:Label>--%>
             <asp:GridView ID="RecipeTable" runat="server" AllowPaging="True" AutoGenerateColumns="False" DataSourceID="RecipesDS" EnableSortingAndPagingCallbacks="True" CssClass="mydatagrid">
                 <Columns>
                     <asp:BoundField DataField="title" HeaderText="Recipe" SortExpression="title">
