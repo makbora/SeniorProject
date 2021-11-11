@@ -15,7 +15,7 @@
         <div style="float:left;width:924px; height: 613px;">
             <asp:Label ID="Label2" runat="server" Text="Results:"></asp:Label>
             <asp:Label ID="Label3" runat="server" Text="Label"></asp:Label>
-            <asp:GridView ID="RecipeTable" runat="server" Width="757px" AllowPaging="True" AutoGenerateColumns="False" DataSourceID="RecipesDS" Height="536px" EnableSortingAndPagingCallbacks="True" CssClass="myListBox">
+            <asp:GridView ID="RecipeTable" runat="server" AllowPaging="True" AutoGenerateColumns="False" DataSourceID="RecipesDS" EnableSortingAndPagingCallbacks="True" CssClass="mydatagrid">
                 <Columns>
                     <asp:BoundField DataField="title" HeaderText="Recipe" SortExpression="title">
                     </asp:BoundField>
@@ -23,9 +23,7 @@
                     </asp:BoundField>
                     <asp:BoundField DataField="link" HeaderText="Link" SortExpression="link"></asp:BoundField>
                 </Columns>
-                <PagerSettings Mode="NextPrevious" />
-                <pagerstyle forecolor="Blue"
-          backcolor="LightBlue"/>
+                <EditRowStyle BorderStyle="Solid" Wrap="True" />
             </asp:GridView>
             
             <asp:SqlDataSource ID="RecipesDS" runat="server" ConnectionString="<%$ ConnectionStrings:LGTBConnectionString %>" ProviderName="<%$ ConnectionStrings:LGTBConnectionString.ProviderName %>" SelectCommand="SELECT &quot;title&quot;, &quot;kind&quot;, &quot;link&quot; FROM &quot;recipes&quot; ORDER BY &quot;title&quot;"></asp:SqlDataSource>
