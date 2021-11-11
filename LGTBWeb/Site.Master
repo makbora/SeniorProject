@@ -61,7 +61,7 @@
             <asp:ContentPlaceHolder ID="MainContent" runat="server">
             </asp:ContentPlaceHolder>
             <hr />
-            <footer style ="padding-top: 1em; text-align: center";>
+            <footer style ="padding-top: 3em; text-align: center";>
                 <p>&copy; <%: DateTime.Now.Year %> Let's Get This Bread</p>
             </footer>
         </div>
