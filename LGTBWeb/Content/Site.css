@@ -20,8 +20,8 @@ textarea {
 
 .myListBox {
     border-style: ridge;
-    border-width: 1px;
-    border: 1px;
+    border-width: 2px;
+    border: 2px;
     font-size: 9.5pt;
     font-family: Verdana;
 }
