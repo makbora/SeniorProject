@@ -18,6 +18,13 @@ textarea {
     max-width: 280px;
 }
 
+.myListBox {
+    border-style: ridge;
+    border-width: 1px;
+    border: 1px;
+    font-size: 9.5pt;
+    font-family: Verdana;
+}
 
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
