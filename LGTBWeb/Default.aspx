@@ -1,7 +1,12 @@
 ﻿<%@ Page Title="Home Page" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="LGTBWeb._Default" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-
+    <style type="text/css">
+        .hiddencol
+        {
+            display: none;
+        }
+    </style>
     <div style="height: 576px; width: 1120px; padding-top: 2em;">
         <div style="float:left;width:191px; ">
             <asp:Label ID="Label1" runat="server" Text="Category:"></asp:Label>
@@ -15,18 +20,18 @@
         <div style="float:left;width:924px; height: 613px;">
             <%--<asp:Label ID="Label2" runat="server" Text="Results:"></asp:Label>
             <asp:Label ID="Label3" runat="server" Text="Label"></asp:Label>--%>
-            <asp:GridView ID="RecipeTable" runat="server" AllowPaging="True" AutoGenerateColumns="False" DataSourceID="RecipesDS" EnableSortingAndPagingCallbacks="True" CssClass="mydatagrid">
+            <asp:GridView ID="RecipeTable" runat="server" AllowPaging="True" AutoGenerateColumns="False" DataSourceID="RecipesDS" CssClass="mydatagrid" AutoGenerateSelectButton="True" OnSelectedIndexChanged="RecipeTable_SelectedIndexChanged">
                 <Columns>
-                    <asp:BoundField DataField="title" HeaderText="Recipe" SortExpression="title">
-                    </asp:BoundField>
-                    <asp:BoundField DataField="kind" HeaderText="Category" SortExpression="kind">
-                    </asp:BoundField>
-                    <asp:BoundField DataField="link" HeaderText="Link" SortExpression="link"></asp:BoundField>
+                    <asp:BoundField DataField="title" HeaderText="Recipe" />
+                    <asp:BoundField DataField="kind" HeaderText="Category" />
+                    <asp:BoundField DataField="link" HeaderText="Link" />
+                    <asp:BoundField DataField="recid" HeaderText="recid" ItemStyle-CssClass="hiddencol" HeaderStyle-CssClass="hiddencol" />
                 </Columns>
                 <EditRowStyle BorderStyle="Solid" Wrap="True" />
             </asp:GridView>
             
-            <asp:SqlDataSource ID="RecipesDS" runat="server" ConnectionString="<%$ ConnectionStrings:LGTBConnectionString %>" ProviderName="<%$ ConnectionStrings:LGTBConnectionString.ProviderName %>" SelectCommand="SELECT &quot;title&quot;, &quot;kind&quot;, &quot;link&quot; FROM &quot;recipes&quot; ORDER BY &quot;title&quot;"></asp:SqlDataSource>
+            
+            <asp:SqlDataSource ID="RecipesDS" runat="server" ConnectionString="<%$ ConnectionStrings:LGTBConnectionString %>" ProviderName="<%$ ConnectionStrings:LGTBConnectionString.ProviderName %>" SelectCommand="SELECT * FROM &quot;recipes&quot; ORDER BY &quot;title&quot;"></asp:SqlDataSource>
             
         </div>
     </div>

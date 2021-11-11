@@ -11,7 +11,7 @@ namespace LGTBWeb
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if(IsPostBack)
+            if(IsPostBack&&ViewState.Count!=0)
             {
                 string v = (string)ViewState["My SQL"];
                 string query = v;
@@ -61,8 +61,16 @@ namespace LGTBWeb
                 RecipesDS.DataBind();
                 RecipeTable.DataBind();
                 ViewState.Add("My SQL", query);
-                //Label3.Text= query;
+                RecipeTable.PageIndex = 0;
             }
+        }
+
+        protected void RecipeTable_SelectedIndexChanged(object sender, EventArgs e)
+        { 
+            TableCellCollection cells = RecipeTable.Rows[RecipeTable.SelectedIndex].Cells;
+            int recid = Int32.Parse(cells[4].Text);
+            Session["RecID"] = recid;
+            Response.Redirect("Recipe.aspx");
         }
     }
 }
