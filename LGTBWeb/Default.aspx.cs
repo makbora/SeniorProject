@@ -61,7 +61,7 @@ namespace LGTBWeb
                 RecipesDS.DataBind();
                 RecipeTable.DataBind();
                 ViewState.Add("My SQL", query);
-                Label3.Text= query;
+                //Label3.Text= query;
             }
         }
     }
