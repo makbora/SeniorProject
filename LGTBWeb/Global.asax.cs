@@ -20,6 +20,7 @@ namespace LGTBWeb
         protected void Session_Start(object sender, EventArgs e)
         {
             Session["RecID"] = 0;
+            Session["Rec"] = "";
         }
     }
 }

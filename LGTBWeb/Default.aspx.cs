@@ -22,7 +22,7 @@ namespace LGTBWeb
         protected void GenreSelect_Click(object sender, EventArgs e)
         {
             int[] genres = GenreBox.GetSelectedIndices();
-            string query = "SELECT title, kind, link FROM recipes ";
+            string query = "SELECT * FROM recipes ";
             Boolean all = false;
             if(genres.Length>0)
             {
@@ -68,8 +68,10 @@ namespace LGTBWeb
         protected void RecipeTable_SelectedIndexChanged(object sender, EventArgs e)
         { 
             TableCellCollection cells = RecipeTable.Rows[RecipeTable.SelectedIndex].Cells;
+            string rec = cells[1].Text;
             int recid = Int32.Parse(cells[4].Text);
             Session["RecID"] = recid;
+            Session["Rec"] = rec;
             Response.Redirect("Recipe.aspx");
         }
     }

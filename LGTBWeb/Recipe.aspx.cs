@@ -12,6 +12,8 @@ namespace LGTBWeb
         protected void Page_Load(object sender, EventArgs e)
         {
             int recid = (int)Session["RecID"];
+            string rec = (string)Session["Rec"];
+            Label1.Text = rec;
             DirDS.SelectCommand = "SELECT direction FROM instructions WHERE recid=" + recid;
             DirDS.DataBind();
             InstrList.DataBind();
