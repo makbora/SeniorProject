@@ -20,5 +20,38 @@ namespace LGTBWeb
             ReqDS.SelectCommand = "SELECT amount,measurement,name,price FROM requirements,ingredients where recid=" + recid + " AND requirements.ingid=ingredients.ingid";
             ReqDS.DataBind();
         }
+
+        protected void IngView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            TableCellCollection cells = IngView.Rows[IngView.SelectedIndex].Cells;
+            IngItem item = new IngItem();
+            if(cells[0].Text=="&nbsp;")
+            {
+                item.Amount = " ";
+            }
+            else
+            {
+                item.Amount = cells[0].Text;
+            }
+            if (cells[1].Text == "&nbsp;")
+            {
+                item.Measurement = " ";
+            }
+            else
+            {
+                item.Measurement = cells[1].Text;
+            }
+            item.Ingredient = cells[2].Text;
+            item.Price = cells[3].Text;
+            List<IngItem> curlist = (List<IngItem>)Session["UserList"];
+            /*foreach(IngItem ing in curlist)
+            {
+                if(ing.ingredient.Equals(item.ingredient))
+                {
+                    ing.amount
+                }
+            }*/
+            curlist.Add(item);
+        }
     }
 }

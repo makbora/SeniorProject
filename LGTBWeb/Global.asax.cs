@@ -9,6 +9,13 @@ using System.Web.SessionState;
 
 namespace LGTBWeb
 {
+    public class IngItem
+    {
+        public string Amount { get; set; }
+        public string Measurement { get; set; }
+        public string Ingredient { get; set; }
+        public string Price { get; set; }
+    }
     public class Global : HttpApplication
     {
         void Application_Start(object sender, EventArgs e)
@@ -21,6 +28,7 @@ namespace LGTBWeb
         {
             Session["RecID"] = 0;
             Session["Rec"] = "";
+            Session["UserList"] = new List<IngItem>();
         }
     }
 }

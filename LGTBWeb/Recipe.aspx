@@ -1,4 +1,4 @@
-﻿<%@ Page Title="About" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Recipe.aspx.cs" Inherits="LGTBWeb.Recipe" %>
+﻿<%@ Page Title="Recipe" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Recipe.aspx.cs" Inherits="LGTBWeb.Recipe" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <asp:Label ID="Label1" runat="server" Text="Label" Font-Bold="True" Font-Size="X-Large"></asp:Label>
@@ -17,12 +17,13 @@
             </div>
             <div class="col">
                 <div style="float:left;">
-                    <asp:GridView ID="IngView" runat="server" AutoGenerateColumns="False" CssClass="mydatagrid" DataSourceID="ReqDS">
+                    <asp:GridView ID="IngView" runat="server" AutoGenerateColumns="False" CssClass="mydatagrid" DataSourceID="ReqDS" OnSelectedIndexChanged="IngView_SelectedIndexChanged">
                         <Columns>
                             <asp:BoundField DataField="amount" HeaderText="amount" SortExpression="amount" />
                             <asp:BoundField DataField="measurement" HeaderText="measurement" SortExpression="measurement" />
                             <asp:BoundField DataField="name" HeaderText="name" SortExpression="name" />
                             <asp:BoundField DataField="price" HeaderText="price" SortExpression="price" />
+                            <asp:CommandField ButtonType="Button" SelectText="Add" ShowSelectButton="True" />
                         </Columns>
                     </asp:GridView>
                 </div>

@@ -1,9 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\WebScraping",
-    "\\WebScraping\\WebScraping"
+    "\\LGTBWeb",
+    "\\WebScraping"
   ],
-  "SelectedNode": "\\WebScraping\\WebScraping.csproj",
+  "SelectedNode": "\\LGTBWeb\\Recipe.aspx",
   "PreviewInSolutionExplorer": false
 }
