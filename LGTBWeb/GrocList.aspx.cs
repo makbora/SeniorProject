@@ -22,6 +22,10 @@ namespace LGTBWeb
                 GroceryView.DataSource = curlist;
                 GroceryView.DataBind();
                 GroceryView.Visible = true;
+                //int price = 0;
+                //for(int i = 0; i < curList.size() - 1; i++) {
+                //  price += curList.get(i).price
+                //}
             }
         }
     }
