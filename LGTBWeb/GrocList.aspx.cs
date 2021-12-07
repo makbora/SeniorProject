@@ -22,11 +22,39 @@ namespace LGTBWeb
                 GroceryView.DataSource = curlist;
                 GroceryView.DataBind();
                 GroceryView.Visible = true;
-                //int price = 0;
-                //for(int i = 0; i < curList.size() - 1; i++) {
-                //  price += curList.get(i).price
-                //}
+                double price = 0;
+                foreach(IngItem item in curlist)
+                {
+                    price += Convert.ToDouble(item.Price);
+                }
+                TotalLabel.Text = "Total is: $" + price;
+                TotalLabel.Visible = true;
             }
+        }
+
+        protected void GroceryView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            GroceryView.DeleteRow(GroceryView.SelectedIndex);
+            List<IngItem> curlist = (List<IngItem>)Session["UserList"];
+            curlist.Remove(curlist[GroceryView.SelectedIndex]);
+            GroceryView.DataBind();
+            if (curlist.Count == 0)
+            {
+                EmptyLabel.Text = "is empty";
+                EmptyLabel.Visible = true;
+                TotalLabel.Visible = false;
+            }
+            double price = 0;
+            foreach (IngItem item in curlist)
+            {
+                price += Convert.ToDouble(item.Price);
+            }
+            TotalLabel.Text = "Total is: $" + price;
+        }
+
+        protected void GroceryView_RowDeleting(object sender, GridViewDeleteEventArgs e)
+        {
+
         }
     }
 }

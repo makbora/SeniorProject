@@ -53,5 +53,34 @@ namespace LGTBWeb
             }*/
             curlist.Add(item);
         }
+
+        protected void AllBut_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < IngView.Rows.Count; i++)
+            {
+                TableCellCollection cells = IngView.Rows[i].Cells;
+                IngItem item = new IngItem();
+                if (cells[0].Text == "&nbsp;")
+                {
+                    item.Amount = " ";
+                }
+                else
+                {
+                    item.Amount = cells[0].Text;
+                }
+                if (cells[1].Text == "&nbsp;")
+                {
+                    item.Measurement = " ";
+                }
+                else
+                {
+                    item.Measurement = cells[1].Text;
+                }
+                item.Ingredient = cells[2].Text;
+                item.Price = cells[3].Text;
+                List<IngItem> curlist = (List<IngItem>)Session["UserList"];
+                curlist.Add(item);
+            }
+        }
     }
 }

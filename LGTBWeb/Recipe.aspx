@@ -26,6 +26,7 @@
                             <asp:CommandField ButtonType="Button" SelectText="Add" ShowSelectButton="True" />
                         </Columns>
                     </asp:GridView>
+                    <asp:Button ID="AllBut" runat="server" OnClick="AllBut_Click" Text="Add All" />
                 </div>
             </div>
         </div>
